@@ -214,6 +214,9 @@ for (const site of sites) {
 }
 
 reload.textContent = t('reloadPages');
+const sponsor = document.getElementById('sponsor');
+sponsor.title = t('sponsor');
+sponsor.setAttribute('aria-label', t('sponsor'));
 
 if (sites.length === 0) {
   empty.textContent = t('noSites');

@@ -12,6 +12,7 @@ colors:
   off: "light-dark(#8f94a3, #7b7f91)"
   key: "light-dark(#f4f5f8, #33343e)"
   key-on: "light-dark(#ece8fd, #3a3560)"
+  sponsor: "light-dark(#bf3989, #db61a2)"
   button: "light-dark(#1b1c22, #eeeff4)"
   on-button: "light-dark(#ffffff, #1b1c22)"
 typography:
@@ -57,10 +58,11 @@ Sekme ve panel 10 px, düğme ve anahtar 8 px, favicon 3 px. Seçili sekme dış
 - Anahtar (`role="switch"`): tuş yüzeyi içinde çizim. Açık: mor tonlu yüzey, mor çizim. Kapalı: gri yüzey, gri çizim.
 - Sessiz düğme (Hepsini Kapat / Hepsini Aç): zeminsiz, 1 px kenarlıklı.
 - Birincil düğme (Sayfaları Yenile): dolu, yalnız gerektiğinde görünür.
+- Sponsor kalbi: alt satırın tam ortasında 30 px'lik bağlantı, GitHub Sponsors sayfasını yeni sekmede açar. Kendi rengi (`--sponsor`, pembe) yalnız burada kullanılır.
 
 ## Do's and Don'ts
 
-- Vurgu rengini anahtar dışında kullanma.
+- Vurgu rengini anahtar dışında kullanma. Pembe yalnız sponsor kalbinindir.
 - Slogan, yardımcı metin, ikincil etiket ekleme.
 - Sekmelere ikon koyma; göz tek görüş alanında yeterince tekrar ediyor.
 - Kart, gölge, degrade ekleme.

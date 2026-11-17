@@ -7,6 +7,7 @@
   --muted: light-dark(#4d505c, #b0b3c0);
   --accent: light-dark(#5a20dc, #a288ff);
   --edge: light-dark(#c5c8d3, #474a5c);
+  --sponsor: light-dark(#bf3989, #db61a2);
   --off: light-dark(#8f94a3, #7b7f91);
   --key: light-dark(#f4f5f8, #33343e);
   --key-on: light-dark(#ece8fd, #3a3560);
@@ -256,18 +257,37 @@ header {
   font-weight: 500;
 }
 
+/* Three columns keep the heart in the exact middle, whichever buttons are showing. */
 footer {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  min-height: var(--space-1);
+  min-height: 46px;
   padding: var(--space-1);
 }
 
-footer:has(button:not([hidden])) {
-  min-height: 46px;
+#sponsor {
+  grid-column: 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--sponsor);
+}
+
+#sponsor:hover {
+  background: var(--panel);
+}
+
+#sponsor svg {
+  width: 16px;
+  height: 16px;
 }
 
 #all {
+  grid-column: 1;
+  justify-self: start;
   height: 30px;
   padding: 0 var(--space-2);
   border: 1px solid var(--edge);
@@ -284,7 +304,8 @@ footer:has(button:not([hidden])) {
 
 #reload {
   height: 30px;
-  margin-left: auto;
+  grid-column: 3;
+  justify-self: end;
   padding: 0 var(--space-2);
   border: 0;
   border-radius: 8px;
@@ -296,6 +317,7 @@ footer:has(button:not([hidden])) {
 .tab:focus-visible,
 .glyph:focus-visible,
 #all:focus-visible,
+#sponsor:focus-visible,
 #reload:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;

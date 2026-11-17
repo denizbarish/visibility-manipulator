@@ -19,5 +19,8 @@
   },
   "tabFullscreen": {
     "message": "Tam Ekran"
+  },
+  "sponsor": {
+    "message": "GitHub'da Sponsor Ol"
   }
 }
