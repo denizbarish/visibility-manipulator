@@ -1,7 +1,23 @@
 {
-  "description": { "message": "Keeps pages active when you switch tabs or windows." },
-  "reloadPages": { "message": "Reload Pages" },
-  "turnAllOff": { "message": "Turn All Off" },
-  "turnAllOn": { "message": "Turn All On" },
-  "noSites": { "message": "No Open Sites" }
+  "description": {
+    "message": "Keeps pages active when you switch tabs or windows."
+  },
+  "reloadPages": {
+    "message": "Reload Pages"
+  },
+  "turnAllOff": {
+    "message": "Turn All Off"
+  },
+  "turnAllOn": {
+    "message": "Turn All On"
+  },
+  "noSites": {
+    "message": "No Open Sites"
+  },
+  "tabVisibility": {
+    "message": "Visibility"
+  },
+  "tabFullscreen": {
+    "message": "Fullscreen"
+  }
 }

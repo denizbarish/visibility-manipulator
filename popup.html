@@ -7,13 +7,17 @@
   </head>
   <body>
     <header>
-      <img src="icons/icon-48.png" width="24" height="24" alt="">
-      <h1>Visibility Manipulator</h1>
-      <button id="all" type="button" hidden></button>
+      <img id="logo" src="icons/icon-48.png" width="24" height="24" alt="Visibility Manipulator">
+      <div id="tabs" role="tablist"></div>
     </header>
-    <ul id="sites"></ul>
-    <p id="empty" hidden></p>
-    <button id="reload" type="button" hidden></button>
+    <div id="panel" role="tabpanel">
+      <ul id="sites"></ul>
+      <p id="empty" hidden></p>
+    </div>
+    <footer>
+      <button id="all" type="button" hidden></button>
+      <button id="reload" type="button" hidden></button>
+    </footer>
     <script type="module" src="popup.js"></script>
   </body>
 </html>

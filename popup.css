@@ -1,18 +1,21 @@
 :root {
   color-scheme: light dark;
-  --bg: light-dark(#ffffff, #17132a);
-  --surface: light-dark(#f3f1fb, #231d3f);
-  --divider: light-dark(#e2def2, #342c56);
-  --text: light-dark(#1a1433, #f1eefc);
-  --muted: light-dark(#6b6485, #a59fc2);
-  --accent: light-dark(#4a22d4, #8b6cff);
-  --accent-text: light-dark(#4a22d4, #b3a0ff);
-  --on-accent: light-dark(#ffffff, #17132a);
-  --track-off: light-dark(#c9c4dc, #453d68);
-  --radius: 12px;
+  --strip: light-dark(#dcdee6, #1d1e24);
+  --panel: light-dark(#ffffff, #2a2b33);
+  --line: light-dark(#eceef3, #363844);
+  --text: light-dark(#1b1c22, #eeeff4);
+  --muted: light-dark(#4d505c, #b0b3c0);
+  --accent: light-dark(#5a20dc, #a288ff);
+  --edge: light-dark(#c5c8d3, #474a5c);
+  --off: light-dark(#8f94a3, #7b7f91);
+  --key: light-dark(#f4f5f8, #33343e);
+  --key-on: light-dark(#ece8fd, #3a3560);
+  --button: light-dark(#1b1c22, #eeeff4);
+  --on-button: light-dark(#ffffff, #1b1c22);
+  --tab-radius: 10px;
   --space-1: 8px;
   --space-2: 12px;
-  --space-3: 16px;
+  --ease: cubic-bezier(0.3, 0.7, 0.3, 1);
 }
 
 * {
@@ -20,80 +23,144 @@
 }
 
 body {
-  width: 320px;
+  width: 340px;
   margin: 0;
-  padding: var(--space-3);
-  background: var(--bg);
+  background: var(--strip);
   color: var(--text);
-  font: 14px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font: 13px/1.35 system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  margin-bottom: var(--space-2);
-}
-
-h1 {
-  flex: 1;
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-#all {
-  padding: 4px var(--space-1);
-  border: 0;
-  border-radius: 8px;
-  background: none;
-  color: var(--accent-text);
+button {
   font: inherit;
-  font-size: 13px;
-  font-weight: 600;
+  color: inherit;
   cursor: pointer;
 }
 
-#all:hover {
-  background: var(--surface);
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* Setting tabs, shaped like the browser's own tabs. */
+header {
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-1) var(--space-1) 0;
+}
+
+#tabs {
+  flex: 1;
+  display: flex;
+}
+
+#logo {
+  flex: none;
+  align-self: center;
+  margin: 0 var(--space-2) 0 6px;
+  border-radius: 6px;
+}
+
+.tab {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 36px;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--tab-radius) var(--tab-radius) 0 0;
+  background: none;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.tab .count {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.tab[aria-selected='true'] {
+  background: var(--panel);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* The outward curves that let the selected tab flow into the panel. */
+.tab[aria-selected='true']::before,
+.tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: var(--tab-radius);
+  height: var(--tab-radius);
+}
+
+.tab[aria-selected='true']::before {
+  left: calc(-1 * var(--tab-radius));
+  background: radial-gradient(circle at 0 0, transparent var(--tab-radius), var(--panel) calc(var(--tab-radius) + 0.5px));
+}
+
+.tab[aria-selected='true']::after {
+  right: calc(-1 * var(--tab-radius));
+  background: radial-gradient(circle at 100% 0, transparent var(--tab-radius), var(--panel) calc(var(--tab-radius) + 0.5px));
+}
+
+.tab:last-child::after {
+  display: none;
+}
+
+#panel {
+  margin: 0 var(--space-1);
+  border-radius: var(--tab-radius);
+  background: var(--panel);
+  overflow: hidden;
+}
+
+#panel[data-mode='fs'] {
+  border-top-right-radius: 0;
 }
 
 #sites {
-  max-height: 336px;
+  max-height: 396px;
   margin: 0;
   padding: 0;
   overflow-y: auto;
   list-style: none;
-  border-radius: var(--radius);
-  background: var(--surface);
   scrollbar-width: thin;
-  scrollbar-color: var(--track-off) transparent;
+  scrollbar-color: var(--off) transparent;
 }
 
-#sites:empty {
-  display: none;
-}
-
-#sites li + li {
-  border-top: 1px solid var(--divider);
-}
-
-#sites label {
+.row {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  min-height: 48px;
-  padding: var(--space-1) var(--space-3);
-  cursor: pointer;
+  gap: 10px;
+  height: 44px;
+  padding: 0 var(--space-1) 0 var(--space-2);
 }
 
-#sites img {
+.row + .row {
+  border-top: 1px solid var(--line);
+}
+
+.row img,
+.row .tile {
   flex: none;
-  border-radius: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
 }
 
-#sites span {
+.row .tile {
+  background: var(--off);
+  color: var(--panel);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.row .host {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -101,72 +168,137 @@ h1 {
   white-space: nowrap;
 }
 
-#sites .current span {
+.row.current .host {
   font-weight: 600;
 }
 
-#sites input {
-  appearance: none;
+/* The switch: a key whose drawing is an eye that closes, or a frame that shrinks, when the site is off. */
+.glyph {
   flex: none;
-  position: relative;
-  width: 40px;
-  height: 24px;
-  margin: 0;
-  border-radius: 12px;
-  background: var(--track-off);
-  cursor: pointer;
-  transition: background 120ms;
+  width: 48px;
+  height: 32px;
+  padding: 4px 7px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 8px;
+  background: var(--key-on);
+  color: var(--accent);
+  transition: color 160ms, background 160ms;
 }
 
-#sites input::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
-  transition: translate 120ms;
+.glyph:hover {
+  border-color: var(--accent);
 }
 
-#sites input:checked {
-  background: var(--accent);
+.glyph[aria-checked='false'] {
+  border-color: var(--edge);
+  background: var(--key);
+  color: var(--off);
 }
 
-#sites input:checked::after {
-  translate: 16px 0;
+.glyph[aria-checked='false']:hover {
+  border-color: var(--off);
+}
+
+.glyph svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The upper lid folds down onto the lower one, so a closed eye is a lashed curve, not a dash. */
+.glyph .lid {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: transform 200ms var(--ease);
+}
+
+.glyph .iris {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: opacity 120ms, transform 200ms var(--ease);
+}
+
+.glyph .lashes {
+  opacity: 0;
+  transition: opacity 120ms;
+}
+
+.glyph[aria-checked='false'] .lid {
+  transform: scaleY(-1);
+}
+
+.glyph[aria-checked='false'] .lashes {
+  opacity: 1;
+  transition-delay: 120ms;
+}
+
+.glyph[aria-checked='false'] .iris {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+/* Each corner turns on the spot: outward when on, inward when off. */
+.glyph .corner {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 200ms var(--ease);
+}
+
+.glyph[aria-checked='false'] .corner {
+  transform: rotate(180deg);
 }
 
 #empty {
   margin: 0;
-  padding: var(--space-3);
-  border-radius: var(--radius);
-  background: var(--surface);
+  padding: 14px var(--space-2);
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 500;
 }
 
-#sites input:focus-visible,
-#all:focus-visible,
-#reload:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+footer {
+  display: flex;
+  align-items: center;
+  min-height: var(--space-1);
+  padding: var(--space-1);
+}
+
+footer:has(button:not([hidden])) {
+  min-height: 46px;
+}
+
+#all {
+  height: 30px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+#all:hover {
+  border-color: var(--muted);
+  color: var(--text);
 }
 
 #reload {
-  display: block;
-  width: 100%;
-  margin-top: var(--space-2);
-  padding: 10px var(--space-3);
+  height: 30px;
+  margin-left: auto;
+  padding: 0 var(--space-2);
   border: 0;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--on-accent);
-  font: inherit;
+  border-radius: 8px;
+  background: var(--button);
+  color: var(--on-button);
   font-weight: 600;
-  cursor: pointer;
+}
+
+.tab:focus-visible,
+.glyph:focus-visible,
+#all:focus-visible,
+#reload:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 [hidden] {
@@ -174,8 +306,8 @@ h1 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #sites input,
-  #sites input::after {
-    transition: none;
+  .glyph,
+  .glyph * {
+    transition: none !important;
   }
 }

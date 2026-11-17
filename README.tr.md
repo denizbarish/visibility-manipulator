@@ -8,7 +8,7 @@
 
 <p align="center"><a href="README.md">English</a></p>
 
-Birçok sayfa, ona bakıp bakmadığınızı izler. Başka sekmeye geçtiğinizde videoyu duraklatır, sayacı durdurur ya da sizi "uzakta" sayar. Visibility Manipulator, her sayfanın kendisini hep görünür ve odakta sanmasını sağlar.
+Birçok sayfa, ona bakıp bakmadığınızı izler. Başka sekmeye geçtiğinizde videoyu duraklatır, sayacı durdurur ya da sizi "uzakta" sayar. Visibility Manipulator, her sayfanın kendisini hep görünür ve odakta sanmasını sağlar. Tam ekran isteyen sayfalarda tam ekranı sekmenin içinde de tutabilir.
 
 ![Nasıl çalışır](docs/how-it-works.svg)
 
@@ -16,6 +16,7 @@ Birçok sayfa, ona bakıp bakmadığınızı izler. Başka sekmeye geçtiğinizd
 
 - [Kurulum](#kurulum)
 - [Kullanım](#kullanım)
+- [Sekme içi tam ekran](#sekme-içi-tam-ekran)
 - [Çalıştığını doğrulama](#çalıştığını-doğrulama)
 - [Kapatma, güncelleme, kaldırma](#kapatma-güncelleme-kaldırma)
 - [Neyi değiştirir](#neyi-değiştirir)
@@ -53,18 +54,32 @@ Eklenti kurulduktan sonra her sitede kendiliğinden çalışır.
 
 ### Hangi sitelerde çalışacağını seçme
 
-<img src="docs/popup.tr.png" width="320" alt="Açık siteleri ve her birinin anahtarını listeleyen eklenti penceresi">
+<img src="docs/popup.tr.png" width="340" alt="Açık siteleri ve her birinin göz anahtarını listeleyen Görünürlük sekmesi">
 
 Araç çubuğundaki Visibility Manipulator simgesine tıklayın. Simgeyi görmüyorsanız yapboz simgesine tıklayıp eklentiyi sabitleyin.
 
-Pencere, hangi sekmede ya da pencerede olursa olsun açık olan bütün siteleri listeler; bulunduğunuz sekmenin sitesi en üsttedir. Bir sitenin ayarını değiştirmek için o sekmeye geçmeniz gerekmez.
+**Görünürlük** sekmesi, hangi sekmede ya da pencerede olursa olsun açık olan bütün siteleri listeler; bulunduğunuz sekmenin sitesi en üsttedir. Bir sitenin ayarını değiştirmek için o sekmeye geçmeniz gerekmez. Sekmedeki sayı, açık olan sitelerin sayısıdır.
 
-1. Gerçek sekme değişimlerini yeniden görmesini istediğiniz her sitenin anahtarını kapatın. Listedeki bütün siteleri birden kapatmak için **Hepsini Kapat** düğmesine tıklayın. Düğme ardından **Hepsini Aç** olur.
+1. Kapatmak istediğiniz sitenin yanındaki göze tıklayın. Göz kapanır ve site gerçek sekme değişimlerini yeniden görür. Listedeki bütün siteleri birden kapatmak için **Hepsini Kapat** düğmesine tıklayın. Düğme ardından **Hepsini Aç** olur.
 2. **Sayfaları Yenile** düğmesine tıklayın. Yalnız ayarı değişen sekmeler yenilenir.
 
 Birden çok sekmesi açık olan site tek satırda görünür ve anahtarı hepsini kapsar. Her seçim siz değiştirene kadar hatırlanır. Sonradan açtığınız siteler açık olarak başlar.
 
 Eklenti izin verirseniz gizli pencerelerde de çalışır: `chrome://extensions` sayfasında Visibility Manipulator kartındaki **Ayrıntılar**'a tıklayın ve **Gizli modda izin ver** seçeneğini açın.
+
+## Sekme içi tam ekran
+
+<img src="docs/popup-fullscreen.tr.png" width="340" alt="Her site için çerçeve anahtarı içeren Tam Ekran sekmesi">
+
+Bazı sayfalar yalnız tam ekranda çalışır; tam ekran da bütün ekranınızı kaplar. Bu ayar açıkken tam ekran isteği ekranı değil sekmeyi doldurur ve sayfaya tam ekranda olduğu söylenir. Diğer pencereleriniz yerinde kalır.
+
+Bu ayar Görünürlük'ten ayrıdır ve siz açana kadar her sitede kapalıdır.
+
+1. Visibility Manipulator simgesine tıklayın ve **Tam Ekran** sekmesini açın.
+2. Sitenin yanındaki çerçeveye tıklayın. Ayar açıkken çerçeve genişler.
+3. Sayfayı her zamanki gibi kullanın. Tam ekran istediğinde sekmeyi doldurur.
+
+Ayar yenileme gerekmeden hemen uygulanır. Eklentiyi kurduğunuzda ya da güncellediğinizde zaten açık olan sekmenin önce bir kez yenilenmesi gerekir; böyle bir sekme varsa pencerede **Sayfaları Yenile** düğmesi görünür. Sekme içi tam ekrandan çıkmak için gerçek tam ekrandaki gibi `Esc` tuşuna basın. Anahtar adres çubuğundaki siteye aittir; o sayfadaki gömülü oynatıcılar ve çerçeveler de ona uyar.
 
 ## Çalıştığını doğrulama
 
@@ -110,6 +125,7 @@ Betik her sayfada ve her çerçevede (gömülü iframe'ler dahil), sayfanın ken
 - **Sunucu taraflı denetimlere etki etmez.** Site etkinliği kendi sunucusunda ölçüyorsa (örneğin ağ üzerinden gönderilen fare hareketi ya da tuş vuruşlarıyla), eklenti bunu değiştirmez.
 - **Site anahtarı her çerçevenin kendi adresine bakar.** `a.com` sitesini kapatırsanız, içine gömülü `b.com` çerçevesi yine yamalanır; başka bir siteye gömülü `a.com` çerçevesi ise yamalanmaz. Kendi adresi olmayan çerçeveler (`about:blank` gibi) onları oluşturan sayfaya uyar.
 - **Site anahtarı portları ayırmaz.** `localhost` kapatılınca `localhost:3000` ve `localhost:5173` birlikte kapanır.
+- **Sekme içi tam ekran, gerçek tam ekranla birebir aynı değildir.** Sayfanın gerçek tam ekrana ayırdığı stiller (CSS `:fullscreen` seçicisi) uygulanmaz. Videonun yerleşik denetimlerindeki tam ekran düğmesi yine gerçek tam ekranı kullanır. Dönüştürülmüş ya da kırpılmış bir kabın içindeki öğe sekmeyi dolduramayabilir; çerçevesi bir web bileşeninin içinde duran oynatıcı da öyle.
 - **Chrome'un kendi sayfaları kapsam dışıdır.** Eklentiler `chrome://` sayfalarında ve Chrome Web Mağazası'nda çalışamaz.
 
 ## Sorun giderme
@@ -145,9 +161,11 @@ Derleme adımı yok. `inject.js` dosyasını düzenleyin, `chrome://extensions` 
 visibility-manipulator/
 ├── manifest.json   Eklenti tanımı (Manifest V3)
 ├── inject.js       Her sayfaya eklenen betik
-├── sites.js        Kapatılan site listesi ve betik kaydı
+├── fullscreen.js   Sekme içi tam ekran, her sayfaya eklenir
+├── fullscreen-config.js  Ayarın hangi sitelerde açık olduğunu fullscreen.js'e bildirir
+├── sites.js        Site listeleri ve betik kaydı
 ├── background.js   Betiği kurulumda ve güncellemede kaydeder
-├── popup.*         Açık sitelerin listesi ve anahtarları
+├── popup.*         İki sekme, açık siteler ve anahtarları
 ├── _locales/       İngilizce ve Türkçe metinler
 ├── icons/          Eklenti simgeleri
 └── docs/           Bu rehberdeki görseller

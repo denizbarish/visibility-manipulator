@@ -1,7 +1,23 @@
 {
-  "description": { "message": "Sekme ya da pencere değiştirdiğinizde sayfaları aktif tutar." },
-  "reloadPages": { "message": "Sayfaları Yenile" },
-  "turnAllOff": { "message": "Hepsini Kapat" },
-  "turnAllOn": { "message": "Hepsini Aç" },
-  "noSites": { "message": "Açık Site Yok" }
+  "description": {
+    "message": "Sekme ya da pencere değiştirdiğinizde sayfaları aktif tutar."
+  },
+  "reloadPages": {
+    "message": "Sayfaları Yenile"
+  },
+  "turnAllOff": {
+    "message": "Hepsini Kapat"
+  },
+  "turnAllOn": {
+    "message": "Hepsini Aç"
+  },
+  "noSites": {
+    "message": "Açık Site Yok"
+  },
+  "tabVisibility": {
+    "message": "Görünürlük"
+  },
+  "tabFullscreen": {
+    "message": "Tam Ekran"
+  }
 }

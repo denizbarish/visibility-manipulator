@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Visibility Manipulator",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "__MSG_description__",
   "default_locale": "en",
   "minimum_chrome_version": "111",
@@ -10,8 +10,13 @@
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-  "permissions": ["scripting", "storage"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": [
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -19,5 +24,30 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "Visibility Manipulator"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "fullscreen.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": true,
+      "match_origin_as_fallback": true
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "fullscreen-config.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_origin_as_fallback": true
+    }
+  ]
 }

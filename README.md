@@ -8,7 +8,7 @@
 
 <p align="center"><a href="README.tr.md">Türkçe</a></p>
 
-Many pages watch whether you are looking at them. When you switch tabs, they pause the video, stop the timer, or mark you as away. Visibility Manipulator makes every page believe it is always visible and focused.
+Many pages watch whether you are looking at them. When you switch tabs, they pause the video, stop the timer, or mark you as away. Visibility Manipulator makes every page believe it is always visible and focused. It can also keep fullscreen inside the tab, for pages that insist on fullscreen.
 
 ![How it works](docs/how-it-works.svg)
 
@@ -16,6 +16,7 @@ Many pages watch whether you are looking at them. When you switch tabs, they pau
 
 - [Install](#install)
 - [Use](#use)
+- [Tab-sized fullscreen](#tab-sized-fullscreen)
 - [Check that it works](#check-that-it-works)
 - [Turn it off, update, or remove it](#turn-it-off-update-or-remove-it)
 - [What it changes](#what-it-changes)
@@ -53,18 +54,32 @@ Once installed, the extension works on every site automatically.
 
 ### Choose which sites it runs on
 
-<img src="docs/popup.png" width="320" alt="The extension popup listing open sites, each with a switch">
+<img src="docs/popup.png" width="340" alt="The Visibility tab of the popup, listing open sites with an eye switch each">
 
 Click the Visibility Manipulator icon in the toolbar. If you do not see the icon, click the puzzle icon and pin the extension.
 
-The popup lists every site you have open, in any tab or window, with the site of the current tab first. You do not need to switch to a tab to change its site.
+The **Visibility** tab lists every site you have open, in any tab or window, with the site of the current tab first. You do not need to switch to a tab to change its site. The number on the tab counts the sites that are switched on.
 
-1. Turn the switch off for each site that should see real tab switches again. To switch off every listed site at once, click **Turn All Off**. The button then becomes **Turn All On**.
+1. Click the eye next to a site to switch it off. The eye closes, and the site sees real tab switches again. To switch off every listed site at once, click **Turn All Off**. The button then becomes **Turn All On**.
 2. Click **Reload Pages**. Only the tabs whose setting changed are reloaded.
 
 A site with several open tabs appears once, and its switch covers all of them. Each choice is remembered until you change it. Sites you open later start switched on.
 
 The extension also works in incognito windows if you allow it: open `chrome://extensions`, click **Details** on Visibility Manipulator, and turn on **Allow in Incognito**.
+
+## Tab-sized fullscreen
+
+<img src="docs/popup-fullscreen.png" width="340" alt="The Fullscreen tab of the popup, with a frame switch for each site">
+
+Some pages only work in fullscreen, which takes over your whole screen. With this setting on, a fullscreen request fills the tab instead, and the page is told it is in fullscreen. Your other windows stay where they are.
+
+This setting is separate from Visibility and is off for every site until you turn it on.
+
+1. Click the Visibility Manipulator icon and open the **Fullscreen** tab.
+2. Click the frame next to the site. The frame opens up when the setting is on.
+3. Use the page as usual. When it asks for fullscreen, it fills the tab.
+
+The setting applies right away, without a reload. A tab that was already open when you installed or updated the extension needs one reload first; the popup shows **Reload Pages** when that is the case. Press `Esc` to leave tab fullscreen, as with real fullscreen. The switch belongs to the site in the address bar, so embedded players and frames on that page follow it.
 
 ## Check that it works
 
@@ -110,6 +125,7 @@ The script runs in every page and every frame (including embedded iframes) befor
 - **Server-side checks are out of reach.** If a site measures activity on its server (for example, by mouse movement or keystrokes sent over the network), this extension does not affect it.
 - **The site switch follows each frame's own address.** If you switch off `a.com`, a frame from `b.com` embedded in it is still patched, and an `a.com` frame embedded in another site is not. Frames without an address of their own (such as `about:blank`) follow the page that created them.
 - **The site switch ignores ports.** Switching off `localhost` covers `localhost:3000` and `localhost:5173` alike.
+- **Tab-sized fullscreen is not pixel-identical to real fullscreen.** Styles a page reserves for real fullscreen (the CSS `:fullscreen` selector) do not apply. The fullscreen button in a video's built-in controls still uses real fullscreen. An element inside a transformed or clipped container may not fill the tab, and neither does a player whose frame sits inside a web component.
 - **Chrome's own pages are excluded.** Extensions cannot run on `chrome://` pages or the Chrome Web Store.
 
 ## Troubleshooting
@@ -145,9 +161,11 @@ There is no build step. Edit `inject.js`, click the reload icon on the extension
 visibility-manipulator/
 ├── manifest.json   Extension definition (Manifest V3)
 ├── inject.js       The script injected into every page
-├── sites.js        Switched-off site list and script registration
+├── fullscreen.js   Tab-sized fullscreen, injected into every page
+├── fullscreen-config.js  Tells fullscreen.js which sites have it on
+├── sites.js        Site lists and script registration
 ├── background.js   Registers the script on install and update
-├── popup.*         The list of open sites and their switches
+├── popup.*         The two tabs, the open sites and their switches
 ├── _locales/       English and Turkish strings
 ├── icons/          Extension icons
 └── docs/           Images used in this guide

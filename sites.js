@@ -37,3 +37,18 @@ export async function setHostsEnabled(hosts, enabled) {
   await registerScript([...disabled]);
   await chrome.storage.local.set({ disabledHosts: [...disabled] });
 }
+
+// Tab-sized fullscreen is opt-in per site; fullscreen-config.js reads this list live.
+export async function getFullscreenHosts() {
+  const { fullscreenHosts = [] } = await chrome.storage.local.get('fullscreenHosts');
+  return fullscreenHosts;
+}
+
+export async function setFullscreenEnabled(hosts, enabled) {
+  const active = new Set(await getFullscreenHosts());
+  for (const host of hosts) {
+    if (enabled) active.add(host);
+    else active.delete(host);
+  }
+  await chrome.storage.local.set({ fullscreenHosts: [...active] });
+}
