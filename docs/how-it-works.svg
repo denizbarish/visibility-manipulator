@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect width="880" height="420" rx="16" fill="#ffffff"/>
+
+  <text x="40" y="44" font-size="15" font-weight="700" fill="#b91c1c">Without the extension</text>
+  <g font-size="14">
+    <rect x="40" y="62" width="200" height="88" rx="12" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="140" y="100" text-anchor="middle" font-weight="600" fill="#111827">You switch tabs</text>
+    <text x="140" y="124" text-anchor="middle" fill="#4b5563">or change window</text>
+
+    <rect x="340" y="62" width="200" height="88" rx="12" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="440" y="92" text-anchor="middle" font-weight="600" fill="#111827">Chrome tells the page</text>
+    <text x="440" y="116" text-anchor="middle" fill="#4b5563">visibilitychange, blur</text>
+    <text x="440" y="136" text-anchor="middle" fill="#4b5563">document.hidden = true</text>
+
+    <rect x="640" y="62" width="200" height="88" rx="12" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="740" y="100" text-anchor="middle" font-weight="600" fill="#7f1d1d">Page pauses</text>
+    <text x="740" y="124" text-anchor="middle" fill="#991b1b">video, timer, session</text>
+  </g>
+  <line x1="244" y1="106" x2="334" y2="106" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="544" y1="106" x2="634" y2="106" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="40" y1="190" x2="840" y2="190" stroke="#e5e7eb" stroke-width="2"/>
+
+  <text x="40" y="232" font-size="15" font-weight="700" fill="#4338ca">With Visibility Manipulator</text>
+  <g font-size="14">
+    <rect x="40" y="250" width="200" height="88" rx="12" fill="#f3f4f6" stroke="#d1d5db"/>
+    <text x="140" y="288" text-anchor="middle" font-weight="600" fill="#111827">You switch tabs</text>
+    <text x="140" y="312" text-anchor="middle" fill="#4b5563">or change window</text>
+
+    <rect x="340" y="250" width="200" height="88" rx="12" fill="#e0e7ff" stroke="#a5b4fc"/>
+    <text x="440" y="280" text-anchor="middle" font-weight="600" fill="#312e81">Extension steps in</text>
+    <text x="440" y="304" text-anchor="middle" fill="#3730a3">events are swallowed</text>
+    <text x="440" y="324" text-anchor="middle" fill="#3730a3">document.hidden = false</text>
+
+    <rect x="640" y="250" width="200" height="88" rx="12" fill="#dcfce7" stroke="#86efac"/>
+    <text x="740" y="288" text-anchor="middle" font-weight="600" fill="#14532d">Page keeps running</text>
+    <text x="740" y="312" text-anchor="middle" fill="#166534">it never notices</text>
+  </g>
+  <line x1="244" y1="294" x2="334" y2="294" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="544" y1="294" x2="634" y2="294" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <text x="440" y="384" text-anchor="middle" font-size="13" fill="#6b7280">Runs inside every page and frame, before the page's own scripts load.</text>
+</svg>
