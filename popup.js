@@ -87,25 +87,9 @@ for (const tab of allTabs) {
 }
 const sites = [...byHost.values()].sort((a, b) => (b.host === activeHost) - (a.host === activeHost));
 
-// Sleeping or still-loading tabs cannot be inspected; they pick up the settings when they load.
+// Filled in after the list is on screen; see the end of this file.
 const patchedByTab = new Map();
 const reachableByTab = new Map();
-await Promise.all(
-  sites.flatMap((site) =>
-    site.tabs
-      .filter((tab) => !tab.discarded && tab.status === 'complete')
-      .map(async (tab) => {
-        try {
-          patchedByTab.set(tab.id, await isPagePatched(tab.id));
-        } catch {
-          // Not inspectable (for example a blocked page): treat it as up to date.
-          return;
-        }
-        // No answer means the tab was opened before the extension was installed or updated.
-        reachableByTab.set(tab.id, await chrome.tabs.sendMessage(tab.id, 'vm-ping').then(() => true, () => false));
-      })
-  )
-);
 
 // A tab keeps its old visibility state until it reloads. Fullscreen applies live,
 // except in tabs that the extension's scripts never reached.
@@ -231,3 +215,23 @@ if (sites.length === 0) {
   });
 }
 showMode('vis');
+
+// Asked only after the list is drawn: a frozen background tab can take minutes to answer,
+// and the popup must not wait for it. Each answer updates the reload button on its own.
+// Sleeping or still-loading tabs cannot be inspected; they pick up the settings when they load.
+for (const site of sites) {
+  for (const tab of site.tabs) {
+    if (tab.discarded || tab.frozen || tab.status !== 'complete') continue;
+    isPagePatched(tab.id).then(
+      async (patched) => {
+        patchedByTab.set(tab.id, patched);
+        refresh();
+        // No answer means the tab was opened before the extension was installed or updated.
+        reachableByTab.set(tab.id, await chrome.tabs.sendMessage(tab.id, 'vm-ping').then(() => true, () => false));
+        refresh();
+      },
+      // Not inspectable (for example a blocked page): treat it as up to date.
+      () => {}
+    );
+  }
+}
