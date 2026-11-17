@@ -31,7 +31,7 @@ The extension is not on the Chrome Web Store. You load it from a folder, which t
 
 ![Install steps](docs/install.svg)
 
-1. **Download the code.** On the GitHub page, click **Code**, then **Download ZIP**, and unzip the file. Or clone it:
+1. **Download the code.** Get the ZIP from the [latest release](https://github.com/denizbarish/visibility-manipulator/releases/latest) and unzip it. Or clone the repository:
    ```bash
    git clone https://github.com/denizbarish/visibility-manipulator.git
    ```
@@ -45,11 +45,21 @@ Visibility Manipulator now appears in your extension list. Keep the folder where
 
 ## Use
 
-There is nothing to configure. Once installed, the extension works on every site automatically.
+Once installed, the extension works on every site automatically.
 
 1. Open the page you want to keep active (a meeting, a video, a course, a dashboard).
 2. If the page was already open before you installed the extension, **reload it once**.
 3. Switch to another tab or app. The page keeps running as if you were still looking at it.
+
+### Switch it off for one site
+
+<img src="docs/popup.png" width="300" alt="The extension popup with a switch for the current site">
+
+1. Open the site and click the Visibility Manipulator icon in the toolbar. If you do not see the icon, click the puzzle icon and pin the extension.
+2. Turn the switch off.
+3. Click **Reload Page**.
+
+The site now sees real tab switches again. Other sites are not affected, and the choice is remembered until you turn the switch back on.
 
 The extension also works in incognito windows if you allow it: open `chrome://extensions`, click **Details** on Visibility Manipulator, and turn on **Allow in Incognito**.
 
@@ -70,7 +80,8 @@ All three happen on `chrome://extensions`:
 
 | Goal | Action |
 | --- | --- |
-| Turn it off for a while | Switch off the toggle on the Visibility Manipulator card, then reload open pages. |
+| Turn it off for one site | Use the switch in the extension popup. See [Switch it off for one site](#switch-it-off-for-one-site). |
+| Turn it off everywhere | Switch off the toggle on the Visibility Manipulator card, then reload open pages. |
 | Update to a new version | Download the new code into the same folder (or run `git pull`), then click the reload icon on the card. |
 | Remove it | Click **Remove** on the card. You can then delete the folder. |
 
@@ -87,13 +98,15 @@ All three happen on `chrome://extensions`:
 | `freeze` event | Fires when Chrome freezes the tab | Never reaches the page |
 | `blur` on inputs and buttons | Fires when a field loses focus | Unchanged, forms keep working |
 
-The script runs in every page and every frame (including embedded iframes) before the page's own scripts load, so the page never sees the real values.
+The script runs in every page and every frame (including embedded iframes) before the page's own scripts load, so the page never sees the real values. Sites you switched off are left untouched.
 
 ## Limits
 
 - **Chrome still throttles background tabs.** Animations driven by `requestAnimationFrame` stop, and timers slow down to about one tick per second. No extension script can lift that. If a page still slows down, drag its tab out into a separate window and leave that window visible behind your other work.
 - **Chrome can discard inactive tabs to save memory.** To prevent it, add the site under `chrome://settings/performance` in **Always keep these sites active**.
 - **Server-side checks are out of reach.** If a site measures activity on its server (for example, by mouse movement or keystrokes sent over the network), this extension does not affect it.
+- **The site switch follows each frame's own address.** If you switch off `a.com`, a frame from `b.com` embedded in it is still patched, and an `a.com` frame embedded in another site is not. Frames without an address of their own (such as `about:blank`) follow the page that created them.
+- **The site switch ignores ports.** Switching off `localhost` covers `localhost:3000` and `localhost:5173` alike.
 - **Chrome's own pages are excluded.** Extensions cannot run on `chrome://` pages or the Chrome Web Store.
 
 ## Troubleshooting
@@ -101,7 +114,7 @@ The script runs in every page and every frame (including embedded iframes) befor
 | Problem | Fix |
 | --- | --- |
 | The page still pauses | Reload the page. Pages opened before installation are not patched until reloaded. |
-| Still pauses after reload | Check that the extension toggle is on at `chrome://extensions`. Then see [Limits](#limits): the page may depend on animation frames, so move it to its own window. |
+| Still pauses after reload | Check that the extension toggle is on at `chrome://extensions` and that the site switch in the popup is on. Then see [Limits](#limits): the page may depend on animation frames, so move it to its own window. |
 | "Manifest file is missing or unreadable" | You selected the wrong folder. Pick the folder that directly contains `manifest.json`. |
 | The extension disappeared after a restart | The folder was moved or deleted. Put it back, or load it again from its new location. |
 | Chrome shows a "Disable developer mode extensions" prompt | This is normal for extensions loaded from a folder. Dismiss it. |
@@ -109,7 +122,17 @@ The script runs in every page and every frame (including embedded iframes) befor
 
 ## Privacy
 
-The extension requests no permissions, makes no network requests, and collects no data. It is two small files, [`manifest.json`](manifest.json) and [`inject.js`](inject.js), which you can read in a minute.
+The extension makes no network requests and collects no data. The list of sites you switched off is stored only in your browser.
+
+It asks for three permissions:
+
+| Permission | Why |
+| --- | --- |
+| Access to all sites | To add the script to every page you open. |
+| `scripting` | To leave the script out of sites you switched off. |
+| `storage` | To remember those sites. |
+
+The code is a handful of small files. [`inject.js`](inject.js) is the only one that runs inside pages.
 
 ## Development
 
@@ -119,6 +142,10 @@ There is no build step. Edit `inject.js`, click the reload icon on the extension
 visibility-manipulator/
 ├── manifest.json   Extension definition (Manifest V3)
 ├── inject.js       The script injected into every page
+├── sites.js        Switched-off site list and script registration
+├── background.js   Registers the script on install and update
+├── popup.*         The per-site switch
+├── _locales/       English and Turkish strings
 ├── icons/          Extension icons
 └── docs/           Images used in this guide
 ```

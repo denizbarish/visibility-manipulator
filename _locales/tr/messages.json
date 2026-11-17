@@ -1,0 +1,5 @@
+{
+  "description": { "message": "Sekme ya da pencere değiştirdiğinizde sayfaları aktif tutar." },
+  "reloadPage": { "message": "Sayfayı Yenile" },
+  "unavailable": { "message": "Bu Sayfada Kullanılamaz" }
+}

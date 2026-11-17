@@ -31,7 +31,7 @@ Eklenti Chrome Web Mağazası'nda değil. Bir klasörden yüklenir, yaklaşık b
 
 ![Kurulum adımları](docs/install.svg)
 
-1. **Kodu indirin.** GitHub sayfasında **Code**, ardından **Download ZIP** düğmesine tıklayın ve dosyayı açın. Ya da klonlayın:
+1. **Kodu indirin.** [Son sürümdeki](https://github.com/denizbarish/visibility-manipulator/releases/latest) ZIP dosyasını indirip açın. Ya da depoyu klonlayın:
    ```bash
    git clone https://github.com/denizbarish/visibility-manipulator.git
    ```
@@ -45,11 +45,21 @@ Visibility Manipulator artık uzantı listenizde görünür. Klasörü yerinde b
 
 ## Kullanım
 
-Ayarlanacak bir şey yok. Eklenti kurulduktan sonra her sitede kendiliğinden çalışır.
+Eklenti kurulduktan sonra her sitede kendiliğinden çalışır.
 
 1. Aktif kalmasını istediğiniz sayfayı açın (toplantı, video, kurs, pano).
 2. Sayfa eklentiyi kurmadan önce açıktıysa **bir kez yenileyin**.
 3. Başka bir sekmeye ya da uygulamaya geçin. Sayfa, hâlâ ona bakıyormuşsunuz gibi çalışmayı sürdürür.
+
+### Tek bir site için kapatma
+
+<img src="docs/popup.png" width="300" alt="Geçerli site için anahtar içeren eklenti penceresi">
+
+1. Siteyi açın ve araç çubuğundaki Visibility Manipulator simgesine tıklayın. Simgeyi görmüyorsanız yapboz simgesine tıklayıp eklentiyi sabitleyin.
+2. Anahtarı kapatın.
+3. **Sayfayı Yenile** düğmesine tıklayın.
+
+Site artık gerçek sekme değişimlerini yeniden görür. Diğer siteler etkilenmez ve seçim, anahtarı yeniden açana kadar hatırlanır.
 
 Eklenti izin verirseniz gizli pencerelerde de çalışır: `chrome://extensions` sayfasında Visibility Manipulator kartındaki **Ayrıntılar**'a tıklayın ve **Gizli modda izin ver** seçeneğini açın.
 
@@ -70,7 +80,8 @@ Eklenti varken her satır `visible true` yazar. Eklenti yokken, uzakta olduğunu
 
 | Amaç | Yapılacak |
 | --- | --- |
-| Bir süreliğine kapatmak | Visibility Manipulator kartındaki anahtarı kapatın, açık sayfaları yenileyin. |
+| Tek bir sitede kapatmak | Eklenti penceresindeki anahtarı kullanın. Bkz. [Tek bir site için kapatma](#tek-bir-site-için-kapatma). |
+| Her yerde kapatmak | Visibility Manipulator kartındaki anahtarı kapatın, açık sayfaları yenileyin. |
 | Yeni sürüme güncellemek | Yeni kodu aynı klasöre indirin (ya da `git pull` çalıştırın), sonra karttaki yenile simgesine tıklayın. |
 | Kaldırmak | Karttaki **Kaldır** düğmesine tıklayın. Ardından klasörü silebilirsiniz. |
 
@@ -87,13 +98,15 @@ Eklenti varken her satır `visible true` yazar. Eklenti yokken, uzakta olduğunu
 | `freeze` olayı | Chrome sekmeyi dondurunca tetiklenir | Sayfaya hiç ulaşmaz |
 | Girdi ve düğmelerde `blur` | Alan odağı kaybedince tetiklenir | Değişmez, formlar çalışır |
 
-Betik her sayfada ve her çerçevede (gömülü iframe'ler dahil), sayfanın kendi betikleri yüklenmeden önce çalışır. Sayfa gerçek değerleri hiç görmez.
+Betik her sayfada ve her çerçevede (gömülü iframe'ler dahil), sayfanın kendi betikleri yüklenmeden önce çalışır. Sayfa gerçek değerleri hiç görmez. Kapattığınız sitelere dokunulmaz.
 
 ## Sınırlar
 
 - **Chrome arka plan sekmelerini yine de kısar.** `requestAnimationFrame` ile çalışan animasyonlar durur, zamanlayıcılar saniyede yaklaşık bire düşer. Bunu hiçbir eklenti betiği aşamaz. Sayfa hâlâ yavaşlıyorsa sekmesini sürükleyip ayrı bir pencereye alın ve o pencereyi diğer işlerinizin arkasında görünür bırakın.
 - **Chrome bellek kazanmak için etkin olmayan sekmeleri boşaltabilir.** Önlemek için siteyi `chrome://settings/performance` sayfasındaki **Bu siteleri her zaman etkin tut** listesine ekleyin.
 - **Sunucu taraflı denetimlere etki etmez.** Site etkinliği kendi sunucusunda ölçüyorsa (örneğin ağ üzerinden gönderilen fare hareketi ya da tuş vuruşlarıyla), eklenti bunu değiştirmez.
+- **Site anahtarı her çerçevenin kendi adresine bakar.** `a.com` sitesini kapatırsanız, içine gömülü `b.com` çerçevesi yine yamalanır; başka bir siteye gömülü `a.com` çerçevesi ise yamalanmaz. Kendi adresi olmayan çerçeveler (`about:blank` gibi) onları oluşturan sayfaya uyar.
+- **Site anahtarı portları ayırmaz.** `localhost` kapatılınca `localhost:3000` ve `localhost:5173` birlikte kapanır.
 - **Chrome'un kendi sayfaları kapsam dışıdır.** Eklentiler `chrome://` sayfalarında ve Chrome Web Mağazası'nda çalışamaz.
 
 ## Sorun giderme
@@ -101,7 +114,7 @@ Betik her sayfada ve her çerçevede (gömülü iframe'ler dahil), sayfanın ken
 | Sorun | Çözüm |
 | --- | --- |
 | Sayfa hâlâ duruyor | Sayfayı yenileyin. Kurulumdan önce açılan sayfalar yenilenene kadar etkilenmez. |
-| Yeniledikten sonra da duruyor | `chrome://extensions` sayfasında eklenti anahtarının açık olduğunu kontrol edin. Sonra [Sınırlar](#sınırlar) bölümüne bakın: sayfa animasyon karelerine bağlı olabilir, ayrı pencereye alın. |
+| Yeniledikten sonra da duruyor | `chrome://extensions` sayfasında eklenti anahtarının ve eklenti penceresindeki site anahtarının açık olduğunu kontrol edin. Sonra [Sınırlar](#sınırlar) bölümüne bakın: sayfa animasyon karelerine bağlı olabilir, ayrı pencereye alın. |
 | "Manifest dosyası eksik veya okunamıyor" | Yanlış klasörü seçtiniz. İçinde doğrudan `manifest.json` bulunan klasörü seçin. |
 | Eklenti yeniden başlatınca kayboldu | Klasör taşınmış ya da silinmiş. Geri koyun ya da yeni konumundan yeniden yükleyin. |
 | Chrome "Geliştirici modundaki uzantıları devre dışı bırak" uyarısı gösteriyor | Klasörden yüklenen eklentilerde bu normaldir. Uyarıyı kapatın. |
@@ -109,7 +122,17 @@ Betik her sayfada ve her çerçevede (gömülü iframe'ler dahil), sayfanın ken
 
 ## Gizlilik
 
-Eklenti hiçbir izin istemez, ağ isteği yapmaz, veri toplamaz. İki küçük dosyadan oluşur: [`manifest.json`](manifest.json) ve [`inject.js`](inject.js). İkisini bir dakikada okuyabilirsiniz.
+Eklenti ağ isteği yapmaz, veri toplamaz. Kapattığınız sitelerin listesi yalnız tarayıcınızda saklanır.
+
+Üç izin ister:
+
+| İzin | Neden |
+| --- | --- |
+| Tüm sitelere erişim | Betiği açtığınız her sayfaya eklemek için. |
+| `scripting` | Betiği kapattığınız sitelerin dışında tutmak için. |
+| `storage` | Bu siteleri hatırlamak için. |
+
+Kod birkaç küçük dosyadan oluşur. Sayfaların içinde çalışan tek dosya [`inject.js`](inject.js) dosyasıdır.
 
 ## Geliştirme
 
@@ -119,6 +142,10 @@ Derleme adımı yok. `inject.js` dosyasını düzenleyin, `chrome://extensions` 
 visibility-manipulator/
 ├── manifest.json   Eklenti tanımı (Manifest V3)
 ├── inject.js       Her sayfaya eklenen betik
+├── sites.js        Kapatılan site listesi ve betik kaydı
+├── background.js   Betiği kurulumda ve güncellemede kaydeder
+├── popup.*         Site bazlı anahtar
+├── _locales/       İngilizce ve Türkçe metinler
 ├── icons/          Eklenti simgeleri
 └── docs/           Bu rehberdeki görseller
 ```
