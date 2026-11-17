@@ -51,15 +51,18 @@ Once installed, the extension works on every site automatically.
 2. If the page was already open before you installed the extension, **reload it once**.
 3. Switch to another tab or app. The page keeps running as if you were still looking at it.
 
-### Switch it off for one site
+### Choose which sites it runs on
 
-<img src="docs/popup.png" width="300" alt="The extension popup with a switch for the current site">
+<img src="docs/popup.png" width="320" alt="The extension popup listing open sites, each with a switch">
 
-1. Open the site and click the Visibility Manipulator icon in the toolbar. If you do not see the icon, click the puzzle icon and pin the extension.
-2. Turn the switch off.
-3. Click **Reload Page**.
+Click the Visibility Manipulator icon in the toolbar. If you do not see the icon, click the puzzle icon and pin the extension.
 
-The site now sees real tab switches again. Other sites are not affected, and the choice is remembered until you turn the switch back on.
+The popup lists every site you have open, in any tab or window, with the site of the current tab first. You do not need to switch to a tab to change its site.
+
+1. Turn the switch off for each site that should see real tab switches again. To switch off every listed site at once, click **Turn All Off**. The button then becomes **Turn All On**.
+2. Click **Reload Pages**. Only the tabs whose setting changed are reloaded.
+
+A site with several open tabs appears once, and its switch covers all of them. Each choice is remembered until you change it. Sites you open later start switched on.
 
 The extension also works in incognito windows if you allow it: open `chrome://extensions`, click **Details** on Visibility Manipulator, and turn on **Allow in Incognito**.
 
@@ -80,7 +83,7 @@ All three happen on `chrome://extensions`:
 
 | Goal | Action |
 | --- | --- |
-| Turn it off for one site | Use the switch in the extension popup. See [Switch it off for one site](#switch-it-off-for-one-site). |
+| Turn it off for some sites | Use the switches in the extension popup. See [Choose which sites it runs on](#choose-which-sites-it-runs-on). |
 | Turn it off everywhere | Switch off the toggle on the Visibility Manipulator card, then reload open pages. |
 | Update to a new version | Download the new code into the same folder (or run `git pull`), then click the reload icon on the card. |
 | Remove it | Click **Remove** on the card. You can then delete the folder. |
@@ -144,7 +147,7 @@ visibility-manipulator/
 ├── inject.js       The script injected into every page
 ├── sites.js        Switched-off site list and script registration
 ├── background.js   Registers the script on install and update
-├── popup.*         The per-site switch
+├── popup.*         The list of open sites and their switches
 ├── _locales/       English and Turkish strings
 ├── icons/          Extension icons
 └── docs/           Images used in this guide

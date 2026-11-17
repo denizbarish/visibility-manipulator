@@ -26,12 +26,14 @@ export async function registerScript(hosts) {
   }
 }
 
-export async function setSiteEnabled(host, enabled) {
-  const hosts = new Set(await getDisabledHosts());
-  if (enabled) hosts.delete(host);
-  else hosts.add(host);
+export async function setHostsEnabled(hosts, enabled) {
+  const disabled = new Set(await getDisabledHosts());
+  for (const host of hosts) {
+    if (enabled) disabled.delete(host);
+    else disabled.add(host);
+  }
   // Register first: a host Chrome rejects as a match pattern must never be saved,
   // or every later registration would fail.
-  await registerScript([...hosts]);
-  await chrome.storage.local.set({ disabledHosts: [...hosts] });
+  await registerScript([...disabled]);
+  await chrome.storage.local.set({ disabledHosts: [...disabled] });
 }

@@ -1,5 +1,7 @@
 {
   "description": { "message": "Keeps pages active when you switch tabs or windows." },
-  "reloadPage": { "message": "Reload Page" },
-  "unavailable": { "message": "Not Available on This Page" }
+  "reloadPages": { "message": "Reload Pages" },
+  "turnAllOff": { "message": "Turn All Off" },
+  "turnAllOn": { "message": "Turn All On" },
+  "noSites": { "message": "No Open Sites" }
 }

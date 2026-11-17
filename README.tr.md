@@ -51,15 +51,18 @@ Eklenti kurulduktan sonra her sitede kendiliğinden çalışır.
 2. Sayfa eklentiyi kurmadan önce açıktıysa **bir kez yenileyin**.
 3. Başka bir sekmeye ya da uygulamaya geçin. Sayfa, hâlâ ona bakıyormuşsunuz gibi çalışmayı sürdürür.
 
-### Tek bir site için kapatma
+### Hangi sitelerde çalışacağını seçme
 
-<img src="docs/popup.png" width="300" alt="Geçerli site için anahtar içeren eklenti penceresi">
+<img src="docs/popup.tr.png" width="320" alt="Açık siteleri ve her birinin anahtarını listeleyen eklenti penceresi">
 
-1. Siteyi açın ve araç çubuğundaki Visibility Manipulator simgesine tıklayın. Simgeyi görmüyorsanız yapboz simgesine tıklayıp eklentiyi sabitleyin.
-2. Anahtarı kapatın.
-3. **Sayfayı Yenile** düğmesine tıklayın.
+Araç çubuğundaki Visibility Manipulator simgesine tıklayın. Simgeyi görmüyorsanız yapboz simgesine tıklayıp eklentiyi sabitleyin.
 
-Site artık gerçek sekme değişimlerini yeniden görür. Diğer siteler etkilenmez ve seçim, anahtarı yeniden açana kadar hatırlanır.
+Pencere, hangi sekmede ya da pencerede olursa olsun açık olan bütün siteleri listeler; bulunduğunuz sekmenin sitesi en üsttedir. Bir sitenin ayarını değiştirmek için o sekmeye geçmeniz gerekmez.
+
+1. Gerçek sekme değişimlerini yeniden görmesini istediğiniz her sitenin anahtarını kapatın. Listedeki bütün siteleri birden kapatmak için **Hepsini Kapat** düğmesine tıklayın. Düğme ardından **Hepsini Aç** olur.
+2. **Sayfaları Yenile** düğmesine tıklayın. Yalnız ayarı değişen sekmeler yenilenir.
+
+Birden çok sekmesi açık olan site tek satırda görünür ve anahtarı hepsini kapsar. Her seçim siz değiştirene kadar hatırlanır. Sonradan açtığınız siteler açık olarak başlar.
 
 Eklenti izin verirseniz gizli pencerelerde de çalışır: `chrome://extensions` sayfasında Visibility Manipulator kartındaki **Ayrıntılar**'a tıklayın ve **Gizli modda izin ver** seçeneğini açın.
 
@@ -80,7 +83,7 @@ Eklenti varken her satır `visible true` yazar. Eklenti yokken, uzakta olduğunu
 
 | Amaç | Yapılacak |
 | --- | --- |
-| Tek bir sitede kapatmak | Eklenti penceresindeki anahtarı kullanın. Bkz. [Tek bir site için kapatma](#tek-bir-site-için-kapatma). |
+| Bazı sitelerde kapatmak | Eklenti penceresindeki anahtarları kullanın. Bkz. [Hangi sitelerde çalışacağını seçme](#hangi-sitelerde-çalışacağını-seçme). |
 | Her yerde kapatmak | Visibility Manipulator kartındaki anahtarı kapatın, açık sayfaları yenileyin. |
 | Yeni sürüme güncellemek | Yeni kodu aynı klasöre indirin (ya da `git pull` çalıştırın), sonra karttaki yenile simgesine tıklayın. |
 | Kaldırmak | Karttaki **Kaldır** düğmesine tıklayın. Ardından klasörü silebilirsiniz. |
@@ -144,7 +147,7 @@ visibility-manipulator/
 ├── inject.js       Her sayfaya eklenen betik
 ├── sites.js        Kapatılan site listesi ve betik kaydı
 ├── background.js   Betiği kurulumda ve güncellemede kaydeder
-├── popup.*         Site bazlı anahtar
+├── popup.*         Açık sitelerin listesi ve anahtarları
 ├── _locales/       İngilizce ve Türkçe metinler
 ├── icons/          Eklenti simgeleri
 └── docs/           Bu rehberdeki görseller

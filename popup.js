@@ -1,9 +1,10 @@
-import { getDisabledHosts, setSiteEnabled } from './sites.js';
+import { getDisabledHosts, setHostsEnabled } from './sites.js';
 
-const hostLabel = document.getElementById('host');
-const favicon = document.getElementById('favicon');
-const toggle = document.getElementById('toggle');
+const list = document.getElementById('sites');
+const empty = document.getElementById('empty');
+const allButton = document.getElementById('all');
 const reload = document.getElementById('reload');
+const t = chrome.i18n.getMessage;
 
 // Only http and https pages can be switched; chrome:// and file pages have no host.
 const hostOf = (url) => {
@@ -28,52 +29,106 @@ const isPagePatched = async (tabId) => {
   return result;
 };
 
-const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-const host = hostOf(tab?.url);
+const disabled = new Set(await getDisabledHosts());
+const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+const activeHost = hostOf(activeTab?.url);
 
-reload.textContent = chrome.i18n.getMessage('reloadPage');
+// One row per site, however many tabs it has open. The current tab's site comes first.
+const sites = new Map();
+for (const tab of await chrome.tabs.query({})) {
+  const host = hostOf(tab.url);
+  if (!host) continue;
+  if (!sites.has(host)) sites.set(host, { host, enabled: !disabled.has(host), tabs: [], switch: null });
+  sites.get(host).tabs.push(tab);
+}
+const ordered = [...sites.values()].sort((a, b) => (b.host === activeHost) - (a.host === activeHost));
 
-if (!host) {
-  hostLabel.textContent = chrome.i18n.getMessage('unavailable');
-  toggle.disabled = true;
-} else {
-  const enabled = !(await getDisabledHosts()).includes(host);
-  // If the page cannot be inspected, assume it matches the saved setting.
-  const pagePatched = await isPagePatched(tab.id).catch(() => enabled);
+// Sleeping or still-loading tabs cannot be inspected; they pick up the setting when they load.
+const patchedByTab = new Map();
+await Promise.all(
+  ordered.flatMap((site) =>
+    site.tabs
+      .filter((tab) => !tab.discarded && tab.status === 'complete')
+      .map(async (tab) => {
+        try {
+          patchedByTab.set(tab.id, await isPagePatched(tab.id));
+        } catch {
+          // Not inspectable (for example a blocked page): treat it as up to date.
+        }
+      })
+  )
+);
 
-  // The page keeps its old state until it reloads.
-  const showReloadIfStale = () => {
-    reload.hidden = toggle.checked === pagePatched;
-  };
+// A tab keeps its old state until it reloads.
+const staleTabs = () =>
+  ordered.flatMap((site) =>
+    site.tabs.filter((tab) => patchedByTab.has(tab.id) && patchedByTab.get(tab.id) !== site.enabled)
+  );
 
-  hostLabel.textContent = host;
-  toggle.checked = enabled;
-  toggle.setAttribute('aria-label', host);
-  showReloadIfStale();
+const refresh = () => {
+  for (const site of ordered) site.switch.checked = site.enabled;
+  const anyEnabled = ordered.some((site) => site.enabled);
+  allButton.textContent = t(anyEnabled ? 'turnAllOff' : 'turnAllOn');
+  reload.hidden = staleTabs().length === 0;
+};
 
-  if (tab.favIconUrl) {
-    favicon.addEventListener('error', () => (favicon.hidden = true));
-    favicon.src = tab.favIconUrl;
-    favicon.hidden = false;
+// Changes are applied one after another, never interleaved.
+let pending = Promise.resolve();
+const apply = (targets, enabled) => {
+  pending = pending.then(async () => {
+    try {
+      await setHostsEnabled(targets.map((site) => site.host), enabled);
+      for (const site of targets) site.enabled = enabled;
+    } catch {
+      // Chrome rejected a host; refresh() puts the switches back.
+    }
+    refresh();
+  });
+};
+
+for (const site of ordered) {
+  const row = document.createElement('li');
+  const label = document.createElement('label');
+  const name = document.createElement('span');
+  const input = document.createElement('input');
+
+  const favIconUrl = site.tabs.find((tab) => tab.favIconUrl)?.favIconUrl;
+  if (favIconUrl) {
+    const icon = document.createElement('img');
+    icon.width = icon.height = 16;
+    icon.alt = '';
+    icon.addEventListener('error', () => icon.remove());
+    icon.src = favIconUrl;
+    label.append(icon);
   }
 
-  // Quick repeated clicks are applied one after another, never interleaved.
-  let pending = Promise.resolve();
-  toggle.addEventListener('change', () => {
-    const target = toggle.checked;
-    pending = pending.then(async () => {
-      try {
-        await setSiteEnabled(host, target);
-      } catch {
-        // Chrome rejected the host; the switch snaps back to show nothing changed.
-        toggle.checked = !target;
-      }
-      showReloadIfStale();
-    });
-  });
+  name.textContent = site.host;
+  input.type = 'checkbox';
+  input.setAttribute('role', 'switch');
+  input.setAttribute('aria-label', site.host);
+  input.addEventListener('change', () => apply([site], input.checked));
+  site.switch = input;
 
+  if (site.host === activeHost) row.classList.add('current');
+  label.append(name, input);
+  row.append(label);
+  list.append(row);
+}
+
+reload.textContent = t('reloadPages');
+
+if (ordered.length === 0) {
+  empty.textContent = t('noSites');
+  empty.hidden = false;
+} else {
+  allButton.hidden = false;
+  allButton.addEventListener('click', () =>
+    apply(ordered, !ordered.some((site) => site.enabled))
+  );
   reload.addEventListener('click', async () => {
-    await chrome.tabs.reload(tab.id);
+    await pending;
+    await Promise.all(staleTabs().map((tab) => chrome.tabs.reload(tab.id)));
     window.close();
   });
+  refresh();
 }
